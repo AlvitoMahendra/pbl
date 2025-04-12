@@ -1,0 +1,179 @@
+<!--! ================================================================ !-->
+{% extends 'index.html' %}
+{% block info %}
+<!--! [End] Header !-->
+<!--! ================================================================ !-->
+<!--! ================================================================ !-->
+<!--! [Start] Main Content !-->
+<!--! ================================================================ !-->
+
+<main class="nxl-container">
+    <div class="nxl-content">
+        <!-- [ page-header ] start -->
+
+        <!-- [ page-header ] end -->
+        <div class="bg-white py-3 border-bottom rounded-0 p-md-0 mb-0">
+            <div class="d-md-none d-flex">
+                <a href="javascript:void(0)" class="page-content-left-open-toggle">
+                    <i class="feather-align-left fs-20"></i>
+                </a>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="nav-tabs-wrapper page-content-left-sidebar-wrapper">
+                    <div class="d-flex d-md-none">
+                        <a href="javascript:void(0)" class="page-content-left-close-toggle">
+                            <i class="feather-arrow-left me-2"></i>
+                            <span>Back</span>
+                        </a>
+                    </div>
+                    <ul class="nav nav-tabs nav-tabs-custom-style" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="tab"
+                                data-bs-target="#profileTab">Profile</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- [ Main Content ] start -->
+        <div class="main-content">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="profileTab" role="tabpanel">
+                    {% if info_user %}
+                    <div class="card card-body lead-info">
+                        <!-- notification -->
+
+                        <div class="mb-4 d-flex align-items-center justify-content-between">
+                            <h5 class="fw-bold mb-0">
+                                <span class="d-block mb-2">Lead Information :</span>
+                                <span class="fs-12 fw-normal text-muted d-block">Following information for your
+                                    lead</span>
+                            </h5>
+
+                            <a href="{{ url_for('update') }}" class="btn btn-icon btn-light-brand">
+                                <i class="feather-edit"></i>
+                            </a>
+
+
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">Name</div>
+                            <div class="col-lg-10"><a href="javascript:void(0);">{{ info_user.username }}</a></div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">Full Name</div>
+                            <div class="col-lg-10"><a href="javascript:void(0);">{{ info_user.fullname }}</a></div>
+                        </div>
+
+
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">Email</div>
+                            <div class="col-lg-10"><a href="javascript:void(0);">{{ info_user.email }}</a></div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">Phone</div>
+                            <div class="col-lg-10"><a href="javascript:void(0);">{{ info_user.nohp }}</a></div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">Date of Birth</div>
+                            <div class="col-lg-10"><a href="javascript:void(0);">{{ info_user.birthday }}</a></div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">Address</div>
+                            <div class="col-lg-10"><a href="javascript:void(0);">{{ info_user.address }}</a>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">City</div>
+                            <div class="col-lg-10"><a href="javascript:void(0);">{{ info_user.city }}</a></div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">Country</div>
+                            <div class="col-lg-10"><a href="javascript:void(0);">{{ info_user.country }} </a></div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">State</div>
+                            <div class="col-lg-10"><a href="javascript:void(0);">{{ info_user.state }}</a></div>
+                        </div>
+
+
+                        <div class="row mb-0">
+                            <div class="col-lg-2 fw-medium">LinkEd</div>
+                            <div class="col-lg-10"><a href="javascript:void(0);">{{ info_user.linked }}</a></div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card card-body general-info">
+                        <div class="mb-4 d-flex align-items-center justify-content-between">
+                            <h5 class="fw-bold mb-0">
+                                <span class="d-block mb-2">General Information :</span>
+                                <span class="fs-12 fw-normal text-muted d-block"></span>
+                            </h5>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">Created</div>
+                            <div class="col-lg-10 hstack gap-1">
+                                <a href="javascript:void(0);" class="hstack gap-2">
+                                    <div class="avatar-text avatar-sm">
+                                        <i class="feather-clock"></i>
+                                    </div>
+                                    <span>{{ info_user.created }}</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">Tags</div>
+                            <div class="col-lg-10 hstack gap-1">
+
+                                {% if session['level'] == 'USER' %}
+                                <span class="badge bg-soft-primary text-primary">User</span>
+
+                                {% else: %}
+                                <span class="badge bg-soft-success text-success">Admin</span>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-lg-2 fw-medium">Description</div>
+                            <div class="col-lg-10 hstack gap-1">Lorem ipsum, dolor sit amet consectetur adipisicing
+                                elit. Molestiae, nulla veniam, ipsam nemo autem fugit earum accusantium reprehenderit
+                                recusandae in minima harum vitae doloremque quasi aut dolorum voluptate. Minima,
+                                deleniti.Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae, nulla
+                                veniam, ipsam nemo autem fugit earum accusantium reprehenderit recusandae in minima
+                                harum vitae doloremque quasi aut dolorum voluptate.</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+        <!-- [ Main Content ] end -->
+    </div>
+    <!-- [ Footer ] start -->
+    <footer class="footer">
+        <p class="fs-11 text-muted fw-medium text-uppercase mb-0 copyright">
+            <span>Copyright ©</span>
+            <script>
+                document.write(new Date().getFullYear());
+            </script>
+        </p>
+        <div class="d-flex align-items-center gap-4">
+            <a href="javascript:void(0);" class="fs-11 fw-semibold text-uppercase">Help</a>
+            <a href="javascript:void(0);" class="fs-11 fw-semibold text-uppercase">Terms</a>
+            <a href="javascript:void(0);" class="fs-11 fw-semibold text-uppercase">Privacy</a>
+        </div>
+    </footer>
+    <!-- [ Footer ] end -->
+</main>
+<!--! ================================================================ !-->
+<!--! [End] Main Content !-->
+<!--! ================================================================ !-->
+<!--! ================================================================ !-->
+<!--! BEGIN: Theme Customizer !-->
+<!--! ================================================================ !-->
+{% endblock %}

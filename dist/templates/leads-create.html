@@ -1,0 +1,200 @@
+<!--! ================================================================ !-->
+{% extends 'index.html' %}
+{% block info %}
+<main class="nxl-container">
+    <div class="nxl-content">
+        <!-- [ page-header ] start -->
+        <div class="bg-white py-3 border-bottom rounded-0 p-md-0 mb-0">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="nav-tabs-wrapper page-content-left-sidebar-wrapper">
+                    <ul class="nav nav-tabs nav-tabs-custom-style" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="tab"
+                                data-bs-target="#profileTab">Profile</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- [ page-header ] end -->
+        <!-- [ Main Content ] start -->
+        <div class="main-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                    <div class="card stretch stretch-full">
+                        <form action="{{ url_for('update_data') }}" method="post">
+
+
+                            <div class="card-body general-info">
+                                <div class="mb-5 d-flex align-items-center justify-content-between">
+                                    <h5 class="fw-bold mb-0 me-4">
+                                        <span class="d-block mb-2">Lead Info :</span>
+                                        <span class="fs-12 fw-normal text-muted text-truncate-1-line">General
+                                            information
+                                            for your lead</span>
+                                    </h5>
+
+                                    <div class="row">
+                                        <div class="col-12 col-lg-12 offset-lg-4 ms-0">
+                                            <button type="submit" class="btn btn-primary ">Update Information</button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="nameInput" class="fw-semibold">Username: </label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-user"></i></div>
+                                            <input type="text" class="form-control" id="nameInput" name="username"
+                                                value="{{ user.username if user.username else '' }}">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="nameInput" class="fw-semibold">Full Name: </label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-user"></i></div>
+                                            <input type="text" class="form-control" id="nameInput" name="fullname"
+                                                value="{{ user.fullname if user.fullname else '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="nameInput" class="fw-semibold">Birthday: </label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-user"></i></div>
+                                            <input type="date" class="form-control" id="nameInput" name="birthday"
+                                                value="{{ user.birthday if user.birthday else '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="mailInput" class="fw-semibold">Email: </label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-mail"></i></div>
+                                            <input type="email" class="form-control" id="mailInput" name="email"
+                                                value="{{ user.email if user.email else '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="phoneInput" class="fw-semibold">Number Phone: </label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-phone"></i></div>
+                                            <input type="text" class="form-control" id="phoneInput" name="nohp"
+                                                value="{{ user.nohp if user.nohp else '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="city" class="fw-semibold">City: </label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-home"></i></div>
+                                            <input type="text" class="form-control" id="city" name="city"
+                                                value="{{ user.city if user.city else '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="country" class="fw-semibold">country: </label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-map"></i></div>
+                                            <input type="text" class="form-control" id="country" name="country"
+                                                value="{{ user.country if user.country else '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="State" class="fw-semibold">State: </label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-compass"></i></div>
+                                            <input type="text" class="form-control" id="State" name="state"
+                                                value="{{ user.state if user.state else '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="addressInput" class="fw-semibold">Address: </label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-map-pin"></i></div>
+                                            <textarea class="form-control" id="addressInput" cols="30" rows="3"
+                                                name="address">{{ user.address if user.address else '' }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="descriptionInput" class="fw-semibold">Description: </label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-type"></i></div>
+                                            <textarea class="form-control" id="descriptionInput" cols="30" rows="5"
+                                                placeholder="Description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ Main Content ] end -->
+    </div>
+
+</main>
+<!--! ================================================================ !-->
+<!--! [End] Main Content !-->
+{% endblock %}

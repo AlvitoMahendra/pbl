@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Video Call</title>
+</head>
+
+<body>
+    <h1>WebRTC Video Call</h1>
+
+    <!-- Input untuk memilih user yang ingin dipanggil -->
+    <input type="text" id="callTo" placeholder="Masukkan username tujuan">
+    <button onclick="startCall()">Mulai Panggilan</button>
+    <button onclick="endCall()">Akhiri Panggilan</button>
+
+    <!-- Video Local & Remote -->
+    <video id="localVideo" autoplay playsinline muted style="width: 45%;"></video>
+    <video id="remoteVideo" autoplay playsinline style="width: 45%;"></video>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let localStream;
+        let peerConnection;
+        let username = prompt("Masukkan username Anda:");
+
+        const config = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' },
+                {
+                    urls: 'turn:numb.viagenie.ca',
+                    username: 'webrtc@live.com',
+                    credential: 'mu_pass'
+                }
+            ]
+        };
+
+        // Memulai Panggilan
+        async function startCall() {
+            const callTo = document.getElementById("callTo").value.trim();
+            if (!callTo) {
+                alert("Masukkan username tujuan!");
+                return;
+            }
+
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById("localVideo").srcObject = localStream;
+
+                peerConnection = new RTCPeerConnection(config);
+                localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+                peerConnection.ontrack = event => {
+                    document.getElementById("remoteVideo").srcObject = event.streams[0];
+                };
+
+                peerConnection.onicecandidate = event => {
+                    if (event.candidate) {
+                        socket.emit("candidate", { from: username, to: callTo, candidate: event.candidate });
+                    }
+                };
+
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                socket.emit("offer", { from: username, to: callTo, offer: offer });
+
+            } catch (error) {
+                alert("Gagal mengakses kamera atau mikrofon.");
+            }
+        }
+
+        // Menerima Offer
+        socket.on("offer", async data => {
+            if (data.to !== username) return; // Pastikan ini panggilan untuk user yang benar
+
+            peerConnection = new RTCPeerConnection(config);
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+            peerConnection.ontrack = event => {
+                document.getElementById("remoteVideo").srcObject = event.streams[0];
+            };
+
+            peerConnection.onicecandidate = event => {
+                if (event.candidate) {
+                    socket.emit("candidate", { from: username, to: data.from, candidate: event.candidate });
+                }
+            };
+
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            socket.emit("answer", { from: username, to: data.from, answer: answer });
+        });
+
+        // Menerima Answer
+        socket.on("answer", data => {
+            if (data.to !== username) return;
+            peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+        });
+
+        // Menerima ICE Candidate
+        socket.on("candidate", data => {
+            if (data.to !== username) return;
+            peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+        });
+
+        // Mengakhiri Panggilan
+        function endCall() {
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+            document.getElementById("localVideo").srcObject = null;
+            document.getElementById("remoteVideo").srcObject = null;
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,290 @@
+{% extends 'index.html' %} {% block appchat %}
+<main class="nxl-container apps-container apps-chat">
+    <div class="nxl-content without-header nxl-full-content">
+        <!-- [ Main Content ] start -->
+        <div class="main-content d-flex">
+            <!-- [ Content Sidebar ] start -->
+            <div class="content-sidebar content-sidebar-xl" data-scrollbar-target="#psScrollbarInit">
+                <div class="content-sidebar-header bg-white sticky-top hstack justify-content-between">
+                    <h4 class="fw-bolder mb-0">Chat</h4>
+
+
+                    <a href="javascript:void(0);" class="btn btn-primary " data-bs-toggle="modal"
+                        data-bs-target="#composeMail">
+                        <i class="feather-plus me-2"></i>
+                        <span>Contact</span>
+                    </a>
+                    <!-- end modal add contact -->
+
+                </div>
+
+
+                <div class="content-sidebar-body">
+                    <div class="py-0 px-4 d-flex align-items-center justify-content-between border-bottom">
+                        <form class="sidebar-search">
+                            <input type="search" class="py-3 px-0 border-0" id="chattingSearch"
+                                placeholder="Search..." />
+                        </form>
+                        <div class="dropdown sidebar-filter">
+                            <a href="javascript:void(0)" data-bs-toggle="dropdown"
+                                class="d-flex align-items-center justify-content-center dropdown-toggle"
+                                data-bs-offset="0, 15">
+                                Newest
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end overflow-auto">
+                                <li>
+                                    <a href="javascript:void(0)" class="dropdown-item">Oldest</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="dropdown-item active">Newest</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="dropdown-item">Replied</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content-sidebar-items" id="contact-list">
+                        <!-- Daftar kontak -->
+                        {% for contact in contacts %}
+                        <div class="p-4 d-flex position-relative border-bottom c-pointer single-item contact-item"
+                            data-username="{{ contact.username }}">
+                            <div class="avatar-image">
+                                <img src="./../assets/images/avatar/{{ loop.index }}.png" class="img-fluid"
+                                    alt="image" />
+                            </div>
+                            <div class="ms-3 item-desc">
+                                <div class="w-100 d-flex align-items-center justify-content-between">
+                                    <a href="javascript:void(0);" class="hstack gap-2 me-2">
+                                        <span>{{ contact.username }}</span>
+                                        <div
+                                            class="wd-5 ht-5 rounded-circle opacity-75 me-1 bg-{{ 'success' if contact.status == 'online' else 'danger' }}">
+                                        </div>
+                                        <span
+                                            class="fs-10 fw-medium text-muted text-uppercase d-none d-sm-block status-text">{{
+                                            contact.status }}</span>
+                                    </a>
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0)" class="avatar-text avatar-sm"
+                                            data-bs-toggle="dropdown">
+                                            <i class="feather-more-vertical"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end overflow-auto">
+                                            <li>
+                                                <a href="javascript:void(0)" class="dropdown-item">
+                                                    <i class="feather-check-circle me-3"></i>
+                                                    <span>Make as Read</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- [ Content Sidebar ] end -->
+            <!-- [ Content Area ] start -->
+            <div class="content-area">
+                <!-- START: Header -->
+                <div class="border-bottom">
+                    <div class="d-flex align-items-center justify-content-between p-4">
+                        <div class="hstack gap-2">
+                            <a href="javascript:void(0)" class="app-sidebar-toggle-btn d-flex d-xl-none">
+                                <i class="feather-menu fs-4"></i>
+                            </a>
+                            <div class="avatar-image">
+                                <img src="./../assets/images/avatar/1.png" class="img-fluid" alt="image"
+                                    id="active-contact-img" />
+                            </div>
+                            <a href="javascript:void(0)" class="hstack gap-2">
+                                <span id="active-contact-name">Pilih kontak...</span>
+                                <div class="wd-5 ht-5 rounded-circle opacity-75 me-1 bg-secondary"
+                                    id="active-contact-status"></div>
+                            </a>
+                        </div>
+                        <div>
+                            <div class="page-header-right ms-auto">
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <a href="javascript:void(0)" class="d-flex" data-bs-toggle="modal"
+                                        data-bs-target="#voiceCallingModalScreen">
+                                        <div class="avatar-text avatar-md" data-bs-toggle="tooltip"
+                                            data-bs-trigger="hover" title="Voice Call">
+                                            <i class="feather-phone-call"></i>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)" class="d-flex d-flex" data-bs-toggle="modal"
+                                        data-bs-target="#videoCallingModalScreen">
+                                        <div class="avatar-text avatar-md" data-bs-toggle="tooltip"
+                                            data-bs-trigger="hover" title="Video Call">
+                                            <i class="feather-video"></i>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)" class="d-flex d-none d-sm-block successAlertMessage">
+                                        <div class="avatar-text avatar-md" data-bs-toggle="tooltip"
+                                            data-bs-trigger="hover" title="Add to Favorite">
+                                            <i class="feather-star"></i>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)" class="ac-info-sidebar-open-trigger"
+                                        data-bs-toggle="offcanvas" data-bs-target="#userProfileDetails">
+                                        <div class="avatar-text avatar-md" data-bs-toggle="tooltip"
+                                            data-bs-trigger="hover" title="Profile Info">
+                                            <i class="feather-info"></i>
+                                        </div>
+                                    </a>
+                                    <div class="dropdown">
+                                        <a href="javascript:void(0);" class="avatar-text avatar-md"
+                                            data-bs-toggle="dropdown" data-bs-offset="0,22">
+                                            <i class="feather-more-vertical"></i>
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <a href="javascript:void(0);" class="dropdown-item">
+                                                <i class="feather-plus me-3"></i>
+                                                <span> Join Group</span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="dropdown-item">
+                                                <i class="feather-user-plus me-3"></i>
+                                                <span>Invite People</span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="dropdown-item">
+                                                <i class="feather-star me-3"></i>
+                                                <span>Add to Favorite</span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="dropdown-item">
+                                                <i class="feather-bell-off me-3"></i>
+                                                <span>Mute Conversion</span>
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="javascript:void(0);" class="dropdown-item">
+                                                <i class="feather-phone-call me-3"></i>
+                                                <span>Group Audio Call</span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="dropdown-item">
+                                                <i class="feather-video me-3"></i>
+                                                <span>Group Video Call</span>
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="javascript:void(0);" class="dropdown-item">
+                                                <i class="feather-slash me-3"></i>
+                                                <span>Block Conversion</span>
+                                            </a>
+                                            <a href="javascript:void(0);" class="dropdown-item">
+                                                <i class="feather-trash-2 me-3"></i>
+                                                <span>Delete Conversion</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- END: Header -->
+                <!-- START: Chatting Conversation -->
+                <div class="chatting-conversation" id="chatMessagesContainer">
+                    <div class="conversation-wrapper" data-scrollbar-target="#psScrollbarInit">
+                        <div class="conversation-wrapper-inner">
+                            <div class="placeholder-text text-center" id="select-contact-placeholder">
+                                <i class="feather-message-circle fs-100 text-secondary mb-3"></i>
+                                <h5>Pilih kontak untuk memulai percakapan</h5>
+                            </div>
+                            <div id="message-list" class="d-none">
+                                <!-- Pesan chat akan ditampilkan di sini -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END: Chatting Conversation -->
+                <!--! START: Message Editor !-->
+
+
+
+
+                <!--  -->
+
+                <div class="d-flex align-items-center border-top message-editor" id="message-input-container" style="
+                    display: none !important;
+                    
+                    margin-top: -60px;
+                    background-color: white;
+                    position: relative;
+                    bottom: 0;
+                    width: 100%;
+                    z-index: 1;  
+                    ">
+                    <div class="dropdown border-end border-gray-5">
+
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown">
+                            <div class="wd-60 d-flex align-items-center justify-content-center" data-bs-toggle="tooltip"
+                                data-bs-trigger="hover" title="Quick Reply" style="height: 59px">
+                                <i class="feather-terminal"></i>
+                            </div>
+                        </a>
+
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-item"><i
+                                        class="feather-file-text me-3"></i>Your issues
+                                    solved</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-item"><i
+                                        class="feather-file-text me-3"></i>Thank you
+                                    message</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown border-end border-gray-5">
+                        <a href="javascript:void(0)" data-bs-toggle="dropdown">
+                            <div class="wd-60 d-flex align-items-center justify-content-center" data-bs-toggle="tooltip"
+                                data-bs-trigger="hover" title="Upload Attachments" style="height: 59px">
+                                <i class="feather-link"></i>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-item"><i
+                                        class="feather-image me-3"></i>Upload Images</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-item"><i
+                                        class="feather-file me-3"></i>Upload Documents</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <input class="form-control border-0 emoji-picker" id="message-input"
+                        placeholder="Type your message here..." />
+                    <div class="border-start border-gray-5 send-message">
+                        <a href="javascript:void(0)" id="send-button"
+                            class="wd-60 d-flex align-items-center justify-content-center" data-bs-toggle="tooltip"
+                            data-bs-trigger="hover" title="Send Message" style="height: 59px"><i
+                                class="feather-send"></i></a>
+                    </div>
+                </div>
+                <!--! END: Message Editor !-->
+            </div>
+            <!-- [ Content Area ] end -->
+        </div>
+        <!-- [ Main Content ] end -->
+    </div>
+
+
+
+</main>
+
+<!-- Data pengguna saat ini -->
+<span id="current-user-data" data-username="{{ current_user }}" style="display: none"></span>
+
+<!-- Socket.IO Client dan Script Chat -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+<script src="./../assets/js/chat.js"></script>
+{% endblock %}
